@@ -1,5 +1,8 @@
 # Banken::DSL
 
+[![Build Status](https://travis-ci.org/yhirano55/banken-dsl.svg?branch=master)](https://travis-ci.org/yhirano55/banken-dsl)
+[![Gem Version](https://badge.fury.io/rb/banken-dsl.svg)](https://badge.fury.io/rb/banken-dsl)
+
 This plugin gives directly define query methods to the controller for a Banken loyalty class by DSL
 
 ## Installation
