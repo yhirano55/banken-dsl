@@ -1,38 +1,85 @@
-# Banken::Dsl
+# Banken::DSL
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/banken/dsl`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+This plugin gives directly define query methods to the controller for a Banken loyalty class by DSL
 
 ## Installation
 
-Add this line to your application's Gemfile:
-
-```ruby
-gem 'banken-dsl'
+``` ruby
+gem "banken-dsl"
 ```
 
-And then execute:
+Include Banken in your application controller:
 
-    $ bundle
+``` ruby
+# app/controllers/application_controller.rb
+class ApplicationController < ActionController::Base
+  include Banken
+  protect_from_forgery
+end
+```
 
-Or install it yourself as:
+Optionally, you can run the generator, which will set up an application loyalty
+with some useful defaults for you:
 
-    $ gem install banken-dsl
+``` sh
+rails g banken:install
+```
+
+After generating your application loyalty, restart the Rails server so that Rails
+can pick up any classes in the new `app/loyalties/` directory.
 
 ## Usage
 
-TODO: Write usage instructions here
+This plugin provides DSL to define query methods to the Controller without creating a loyalty class:
 
-## Development
+``` ruby
+# app/controllers/posts_controller.rb
+class PostsController < ApplicationController
+  authorization_policy do
+    index   { true }
+    show    { true }
+    create  { user.admin? }
+    update  { user.admin? && record.unpublished? }
+    destroy { user.admin? && record.unpublished? }
+  end
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+  before_action :set_post, only: [:show, :edit, :update, :destroy]
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+  def index
+    @posts = Post.all
+  end
 
-## Contributing
+  def show
+  end
+end
+```
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/yhirano55/banken-dsl.
+You can define the loyalty class by `authorization_policy` method as same as this code:
+
+```ruby
+# app/loyalties/posts_loyalty.rb
+class PostsLoyalty < ApplicationLoyalty
+  def index?
+    true
+  end
+
+  def show?
+    true
+  end
+
+  def create?
+    user.admin?
+  end
+
+  def update?
+    user.admin? && record.unpublished?
+  end
+
+  def destroy?
+    user.admin? && record.unpublished?
+  end
+end
+```
 
 ## License
 
