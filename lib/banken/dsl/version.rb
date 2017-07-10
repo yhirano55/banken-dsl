@@ -1,0 +1,5 @@
+module Banken
+  module DSL
+    VERSION = "0.1.0".freeze
+  end
+end
