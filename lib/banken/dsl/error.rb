@@ -1,5 +1,5 @@
 module Banken
   module DSL
-    UndefinedAction = Class.new(NameError)
+    UndefinedAction = Class.new(NoMethodError)
   end
 end
