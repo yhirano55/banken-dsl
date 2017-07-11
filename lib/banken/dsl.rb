@@ -13,6 +13,10 @@ module Banken
         banken_dsl_proxy.define_banken_query_method_for(action_name, &block)
       end
 
+      def define_banken_permit_attributes_method(&block)
+        banken_dsl_proxy.define_banken_permit_attributes_method(&block)
+      end
+
       private
 
         def banken_dsl_proxy
